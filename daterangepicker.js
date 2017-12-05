@@ -1329,6 +1329,7 @@
                     date = date.clone().hour(hour).minute(minute).second(second);
                 }
                 this.endDate = null;
+                this.element.trigger('setCheckIn.daterangepicker', this);
                 this.setStartDate(date.clone());
             } else if (!this.endDate && date.isBefore(this.startDate)) {
                 //special case: clicking the same date for start/end,
