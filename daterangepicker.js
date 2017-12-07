@@ -51,6 +51,7 @@
         this.linkedCalendars = true;
         this.autoUpdateInput = true;
         this.alwaysShowCalendars = false;
+        this.ignoreClickOn = [];
         this.ranges = {};
 
         this.opens = 'right';
@@ -272,6 +273,9 @@
 
         if (typeof options.alwaysShowCalendars === 'boolean')
             this.alwaysShowCalendars = options.alwaysShowCalendars;
+
+        if (typeof options.ignoreClickOn === 'object')
+            this.ignoreClickOn = options.ignoreClickOn;
 
         // update day names order to firstDay
         if (this.locale.firstDay != 0) {
@@ -1167,7 +1171,19 @@
                 target.closest(this.element).length ||
                 target.closest(this.container).length ||
                 target.closest('.calendar-table').length
-                ) return;
+            ) return;
+
+            // Click on "allowed elements" (like custom inputs for check in and out) should not 
+            // hide it
+            if(this.ignoreClickOn.length){
+                for (var i = 0; i < this.ignoreClickOn.length; i++) {
+                    if(this.ignoreClickOn[i] && this.ignoreClickOn[i] === target[0]){
+                        console.log('ignoring click outside');
+                        return;
+                    }
+                }
+            }
+
             this.hide();
             this.element.trigger('outsideClick.daterangepicker', this);
         },
