@@ -1100,7 +1100,9 @@
             }
         },
 
-        show: function(e) {
+        // This new argument <step> should be either "check-in" or "check-out"
+        show: function( step ) {
+
             if (this.isShowing) return;
 
             // Create a click proxy that is private to this instance of datepicker, for unbinding
@@ -1119,15 +1121,40 @@
             // Reposition the picker if the window is resized while it's open
             $(window).on('resize.daterangepicker', $.proxy(function(e) { this.move(e); }, this));
 
+
             this.oldStartDate = this.startDate.clone();
-            this.oldEndDate = this.endDate.clone();
-            this.previousRightTime = this.endDate.clone();
+
+            if(this.endDate){
+                this.oldEndDate = this.endDate.clone();
+                this.previousRightTime = this.endDate.clone();
+            }
+
+            this.updateView();
+            if(step === 'checkout'){
+                this.startDate = this.oldStartDate;
+                this.endDate = null;
+            } else if (step === 'checkin'){
+                // this.endDate = this.oldEndDate;
+                this.startDate = null;
+            }
 
             this.updateView();
             this.container.show();
             this.move();
             this.element.trigger('show.daterangepicker', this);
             this.isShowing = true;
+        },
+
+        showCheckOut: function(){
+            this.startDate = this.oldStartDate;
+            this.endDate = null;
+            this.updateView();
+        },
+
+        showCheckIn: function(){
+            this.endDate = this.oldEndDate;
+            this.startDate = null;
+            this.updateView();
         },
 
         hide: function(e) {
@@ -1178,11 +1205,11 @@
             if(this.ignoreClickOn.length){
                 for (var i = 0; i < this.ignoreClickOn.length; i++) {
                     if(this.ignoreClickOn[i] && this.ignoreClickOn[i] === target[0]){
-                        console.log('ignoring click outside');
                         return;
                     }
                 }
             }
+
 
             this.hide();
             this.element.trigger('outsideClick.daterangepicker', this);
