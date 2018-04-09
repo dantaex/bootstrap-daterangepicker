@@ -31,6 +31,7 @@
     var DateRangePicker = function(element, options, cb) {
 
         //default settings for options
+        this.static = false;
         this.parentEl = 'body';
         this.element = $(element);
         this.startDate = moment().startOf('day');
@@ -128,6 +129,7 @@
             '</div>';
 
         this.parentEl = (options.parentEl && $(options.parentEl).length) ? $(options.parentEl) : $(this.parentEl);
+        this.static = options.static ? options.static : this.static; // :)
         this.container = $(options.template).appendTo(this.parentEl);
 
         //
@@ -336,7 +338,7 @@
 
                 // If the end of the range is before the minimum or the start of the range is
                 // after the maximum, don't display this range option at all.
-                if ((this.minDate && end.isBefore(this.minDate, this.timepicker ? 'minute' : 'day')) 
+                if ((this.minDate && end.isBefore(this.minDate, this.timepicker ? 'minute' : 'day'))
                   || (maxDate && start.isAfter(maxDate, this.timepicker ? 'minute' : 'day')))
                     continue;
 
@@ -1046,6 +1048,12 @@
             var parentOffset = { top: 0, left: 0 },
                 containerTop;
             var parentRightEdge = $(window).width();
+
+            if(this.static){
+              this.container.css({position: 'static'});
+              return;
+            }
+
             if (!this.parentEl.is('body')) {
                 parentOffset = {
                     top: this.parentEl.offset().top - this.parentEl.scrollTop(),
@@ -1200,7 +1208,7 @@
                 target.closest('.calendar-table').length
             ) return;
 
-            // Click on "allowed elements" (like custom inputs for check in and out) should not 
+            // Click on "allowed elements" (like custom inputs for check in and out) should not
             // hide it
             if(this.ignoreClickOn.length){
                 for (var i = 0; i < this.ignoreClickOn.length; i++) {
@@ -1574,7 +1582,7 @@
             this.container.find('input[name="daterangepicker_start"], input[name="daterangepicker_end"]').removeClass('active');
             $(e.target).addClass('active');
 
-            // Set the state such that if the user goes back to using a mouse, 
+            // Set the state such that if the user goes back to using a mouse,
             // the calendars are aware we're selecting the end of the range, not
             // the start. This allows someone to edit the end of a date range without
             // re-selecting the beginning, by clicking on the end date input then
