@@ -1172,10 +1172,6 @@
 
         hide: function(e) {
 
-            if(this.alwaysVisible){
-              return;
-            }
-
             if (!this.isShowing) return;
 
             //incomplete date selection, revert to last values
@@ -1190,6 +1186,10 @@
 
             //if picker is attached to a text input, update it
             this.updateElement();
+
+            if(this.alwaysVisible){
+              return;
+            }
 
             $(document).off('.daterangepicker');
             $(window).off('.daterangepicker');
