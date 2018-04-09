@@ -1,3 +1,10 @@
+
+## New event added:
+
+`cancel.daterangepicker` : Triggered when the cancel button is clicked
+
+Original Readme reproduced hereinafter:
+
 # Date Range Picker for Bootstrap
 
 ![Improvely.com](http://i.imgur.com/LbAMf3D.png)
