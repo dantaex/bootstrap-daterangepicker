@@ -32,6 +32,7 @@
 
         //default settings for options
         this.static = false;
+        this.alwaysVisible = false;
         this.parentEl = 'body';
         this.element = $(element);
         this.startDate = moment().startOf('day');
@@ -130,6 +131,7 @@
 
         this.parentEl = (options.parentEl && $(options.parentEl).length) ? $(options.parentEl) : $(this.parentEl);
         this.static = options.static ? options.static : this.static; // :)
+        this.alwaysVisible = options.alwaysVisible ? options.alwaysVisible : this.alwaysVisible; // :)
         this.container = $(options.template).appendTo(this.parentEl);
 
         //
@@ -462,6 +464,9 @@
             this.element.trigger('change');
         }
 
+        if(this.alwaysVisible){
+          this.show();
+        }
     };
 
     DateRangePicker.prototype = {
@@ -1166,6 +1171,11 @@
         },
 
         hide: function(e) {
+
+            if(this.alwaysVisible){
+              return;
+            }
+
             if (!this.isShowing) return;
 
             //incomplete date selection, revert to last values
